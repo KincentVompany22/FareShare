@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% load static %} 
+
+{% block title %}
+Details
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/stamps/stamp-detail.css' %}" />
+{% endblock %} 
+
+{% block content %}
+<section class="stamp-container">
+    <div class="stamp-actions">
+        <a href="{% url 'share-index' %}" class="btn">Back to Shares</a>
+    </div>
+    <div class="share-details">
+        <h2> {{ share.title }} </h2>
+        <p> {{ share.get_currency_display}} </p>
+        <p> {{ share.created_at|date:"F Y" }} </p>
+
+        <h3> Participants </h3>
+            <ul>
+            {% for participant in share.participants.all %}
+                <li>
+                    {{ participant.username}} {% if participant.id == share.creator_id %} (creator) {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+    
+        <div class="share-actions">
+          {% if share.creator == request.user %}
+            <a href="{% url 'share-update' share.id %}" class="btn warn">Edit</a>
+            <a href="{% url 'share-delete' share.id %}" class="btn danger">Delete</a>
+          {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="fares">
+    
+    <a href="{% url 'fare-create' share.id %}" class="btn">Add Fare</a>
+    
+    <div class="subsection-title">
+      <h2>Fares</h2>
+    </div>
+    {% if share.fare_set.all.count %}
+    <table>
+      <tbody>
+        {% for fare in share.fare_set.all %}
+          <tr>
+            <td>{{fare.get_category_display|slice:'-2:'}}</td>
+            <td>{{fare.name}}</td>
+            <td>Paid by: {{fare.paid_by}}</td>   
+            <td>{{share.get_currency_display|slice:':1'}}{{fare.amount}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <h3> No fares added yet! </h3>
+    {% endif %}
+</section>
+
+{% endblock %} 

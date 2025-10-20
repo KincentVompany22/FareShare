@@ -1,0 +1,107 @@
+/* ===== Brand theme (shareed) ===== */
+:root{
+  --brand:        rgba(35,77,60,1);     /* forest green */
+  --brand-700:    rgba(35,77,60,0.9);
+  --brand-100:    rgba(35,77,60,0.10);
+  --navy:         rgba(26,41,66,1);     /* deep navy */
+  --navy-100:     rgba(26,41,66,0.08);
+  --ink:          #0f172a;              /* text */
+  --muted:        #64748b;              /* secondary text */
+  --paper:        #ffffff;
+  --line:         #e6e8eb;
+
+  --danger:       #dc2626;
+  --danger-700:   #b91c1c;
+  --warn:         #f59e0b;
+  --warn-700:     #d97706;
+
+  --radius: 14px;
+  --shadow-sm: 0 6px 18px rgba(2, 6, 23, 0.06);
+}
+
+/* ===== Containers & headings with brand accents ===== */
+.share-details,
+.fares{
+  background: var(--paper);
+  border: 1px solid var(--navy-100);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.share-details h1{
+  color: var(--navy);
+}
+.share-details h2{
+  color: var(--brand);
+}
+.share-details h3{
+  color: var(--muted);
+}
+
+/* ===== Action bar spacing (unchanged) ===== */
+.share-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+
+/* ===== Buttons with brand colors ===== */
+.btn{
+  background: var(--brand);
+  color: #fff;
+  border: 1px solid transparent;
+}
+.btn:hover{ background: var(--brand-700); }
+
+.btn.secondary{
+  background: transparent;
+  color: var(--brand);
+  border: 1px solid var(--brand-700);
+}
+.btn.secondary:hover{ background: var(--brand-100); }
+
+.btn.warn{
+  background: var(--warn);
+  color: #fff;
+}
+.btn.warn:hover{ background: var(--warn-700); }
+
+.btn.danger{
+  background: var(--danger);
+  color: #fff;
+}
+.btn.danger:hover{ background: var(--danger-700); }
+
+/* ===== Table styling with subtle navy header ===== */
+.fares table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--navy-100);
+}
+
+.fares thead th{
+  text-align: left;
+  font-weight: 700;
+  padding: 12px 14px;
+  background: var(--navy-100);
+  color: var(--navy);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.fares tbody td{
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef0f2;
+}
+.fares tbody tr:hover{ background: #fafbfc; }
+
+/* ===== Page wrappers (keep your layout) ===== */
+.share-container{
+  display:grid; gap:18px; grid-template-columns:1fr;
+  max-width:960px; margin:0 auto; padding:20px;
+}
+.share-details{ padding:20px; }
+.share-details-container{ max-width:960px; margin:10px auto 40px; padding:0 20px 20px; }
+.fares{ padding:18px; }
+
+.subsection-title{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.subsection-title h2{ margin:0 0 8px; color: var(--brand); }
