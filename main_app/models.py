@@ -44,8 +44,8 @@ class Fare(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField('Paid Date')
     category = models.CharField(max_length=100, choices=FARE_TYPES, default=FARE_TYPES[0][0])
-    paid_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="paid_by")
-    split_between = models.ManyToManyField(User, related_name="split_between")
+    paid_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="fares_paid")
+    split_between = models.ManyToManyField(User, related_name="fares_split")
 
     def __str__(self):
         return self.name

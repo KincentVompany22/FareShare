@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -44,73 +44,97 @@ class ShareIndex(LoginRequiredMixin, ListView):
     ordering = ['-created_at']
 
     def get_queryset(self):
-        return (Share.objects.filter(creator=self.request.user))
+        return (Share.objects.filter(participants=self.request.user)) # restricts the query set to only participants (inclduing creator)
 
 class ShareDetail(DetailView):
     model = Share
     template_name = 'shares/detail.html'
+    
+    def get_queryset(self):
+        return (Share.objects.filter(participants=self.request.user)) # restricts the query set to only participants (inclduing creator)
 
 class ShareCreate(LoginRequiredMixin, CreateView):
     model = Share
     fields = ['title', 'currency', 'participants']
+
     def form_valid(self, form):
         form.instance.creator = self.request.user
         response = super().form_valid(form)
-        self.object.participants.add(self.request.user)
+        self.object.participants.add(self.request.user) # add creator as a participant
         return response
 
 class ShareUpdate(LoginRequiredMixin, UpdateView):
     model = Share
     fields = ['title', 'currency', 'participants']
-    def dispatch(self, request, *args, **kwargs):
-        share = self.get_object()
-        if share.creator != self.request.user:
-            return redirect('share-detail', pk=stamp.pk)
 
-        return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        return (Share.objects.filter(creator=self.request.user)) # restricts the query set to only creator
 
 class ShareDelete(LoginRequiredMixin, DeleteView):
     model = Share
     success_url = '/shares/'
-    def dispatch(self, request, *args, **kwargs):
-        share = self.get_object()
-        if share.creator != self.request.user:
-            return redirect('share-detail', pk=stamp.pk)
 
-        return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        return (Share.objects.filter(creator=self.request.user)) # restricts the query set to only creator
     
 ####
 
 class FareCreate(LoginRequiredMixin, CreateView):
     model = Fare
     fields = ['name', 'amount', 'date', 'category', 'paid_by', 'split_between']
+
     def form_valid(self, form):
         form.instance.share_id = self.kwargs['share_id']
         return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs): # protects URL route from those who do not have access
+        self.share = get_object_or_404( # Django shortcut to return single object and if not found generate 404
+            Share.objects.filter(participants=request.user).distinct(), pk=self.kwargs['share_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form(self): # renders correct info in form
+        form = super().get_form()
+        form.fields['split_between'].required = False
+        form.fields['split_between'].queryset = self.share.participants.all() # limit form field to only show Share participants
+        form.fields['paid_by'].queryset = self.share.participants.all() # limit form field to only show Share participants
+        return form
+
 
 class FareDetail(LoginRequiredMixin, DetailView):
     model = Fare
     template_name = 'shares/fare-detail.html'
 
+    def dispatch(self, request, *args, **kwargs): # protects URL route from those who do not have access
+        self.share = get_object_or_404( # Django shortcut to return single object and if not found generate 404
+            Share.objects.filter(participants=request.user).distinct(), pk=self.kwargs['share_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+
 class FareUpdate(LoginRequiredMixin, UpdateView):
     model = Fare
     fields = ['name', 'amount', 'date', 'category', 'paid_by', 'split_between']
-    def dispatch(self, request, *args, **kwargs):
-        fare = self.get_object()
-        if fare.share.creator != self.request.user:
-            return redirect('share-detail', pk=fare.share.pk)
 
+    def dispatch(self, request, *args, **kwargs): # protects URL route from those who do not have access
+        self.share = get_object_or_404( # Django shortcut to return single object and if not found generate 404
+            Share.objects.filter(participants=request.user).distinct(), pk=self.kwargs['share_id'])
         return super().dispatch(request, *args, **kwargs)
+
+    def get_form(self): # renders correct info in form
+        form = super().get_form()
+        form.fields['split_between'].required = False
+        form.fields['split_between'].queryset = self.share.participants.all() # limit form field to only show Share participants
+        form.fields['paid_by'].queryset = self.share.participants.all() # limit form field to only show Share participants
+        return form
 
 class FareDelete(LoginRequiredMixin, DeleteView):
     model = Fare
+
     def get_success_url(self):
         return reverse("share-detail", kwargs={"pk": self.object.share.pk})
-    def dispatch(self, request, *args, **kwargs):
-        fare = self.get_object()
-        if fare.share.creator != self.request.user:
-            return redirect('share-detail', pk=fare.share.pk)
 
+    def dispatch(self, request, *args, **kwargs): # protects URL route from those who do not have access
+        self.share = get_object_or_404( # Django shortcut to return single object and if not found generate 404
+            Share.objects.filter(participants=request.user).distinct(), pk=self.kwargs['share_id'])
         return super().dispatch(request, *args, **kwargs)
 
     
