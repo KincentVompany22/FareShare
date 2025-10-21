@@ -9,57 +9,30 @@ Details
 {% endblock %} 
 
 {% block content %}
-<section class="stamp-container">
-    <div class="stamp-actions">
-        <a href="{% url 'share-index' %}" class="btn">Back to Shares</a>
-    </div>
-    <div class="share-details">
-        <h2> {{ share.title }} </h2>
-        <p> {{ share.get_currency_display}} </p>
-        <p> {{ share.created_at|date:"F Y" }} </p>
-
-        <h3> Participants </h3>
-            <ul>
-            {% for participant in share.participants.all %}
-                <li>
-                    {{ participant.username}} {% if participant.id == share.creator_id %} (creator) {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-    
-        <div class="share-actions">
-          {% if share.creator == request.user %}
-            <a href="{% url 'share-update' share.id %}" class="btn warn">Edit</a>
-            <a href="{% url 'share-delete' share.id %}" class="btn danger">Delete</a>
-          {% endif %}
-        </div>
-    </div>
-</section>
 
 <section class="fares">
-    {% if share.user == request.user %}
-    <a href="{% url 'fare-create' share.id %}" class="btn">Add Fare</a>
-    {% endif %}
+    <div class="fare-actions">
+        <a href="{% url 'share-detail' fare.share.id %}" class="btn">Back to {{fare.share.title}} Share</a>
+    </div>
     
     <div class="subsection-title">
-      <h2>Fares</h2>
+      <h2>{{fare.get_category_display|slice:'-2:'}} {{fare.name}}</h2>
+      <h3> {{fare.date}} </h3>
     </div>
-    {% if share.fare_set.all.count %}
-    <table>
-      <tbody>
-        {% for fare in share.fare_set.all %}
-          <tr>
-            <td>{{fare.get_category_display|slice:'-2:'}}</td>
-            <td>{{fare.name}}</td>
-            <td>Paid by: {{fare.paid_by}}</td>   
-            <td>{{share.get_currency_display|slice:':1'}}{{fare.amount}}</td>
-          </tr>
+    
+    <p>Paid by: {{fare.paid_by}}</p>   
+    <p>{{fare.share.get_currency_display|slice:':1'}} {{fare.amount}} </p>
+    <h3> Split Between </h3>
+    <ul>
+        {% for split in fare.split_between.all %}
+            <li>
+                {{ split.username}}
+            </li>
         {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <h3> No fares added yet! </h3>
-    {% endif %}
+    </ul>
+    <a href="{% url 'fare-update' fare.share.id fare.id %}" class="btn warn">Edit</a>
+    <a href="{% url 'fare-delete' fare.share.id fare.id %}" class="btn warn">Delete</a>
+
 </section>
 
 {% endblock %} 

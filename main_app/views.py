@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -87,6 +87,39 @@ class FareCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.share_id = self.kwargs['share_id']
         return super().form_valid(form)
+
+class FareDetail(LoginRequiredMixin, DetailView):
+    model = Fare
+    template_name = 'shares/fare-detail.html'
+
+class FareUpdate(LoginRequiredMixin, UpdateView):
+    model = Fare
+    fields = ['name', 'amount', 'date', 'category', 'paid_by', 'split_between']
+    def dispatch(self, request, *args, **kwargs):
+        fare = self.get_object()
+        if fare.share.creator != self.request.user:
+            return redirect('share-detail', pk=fare.share.pk)
+
+        return super().dispatch(request, *args, **kwargs)
+
+class FareDelete(LoginRequiredMixin, DeleteView):
+    model = Fare
+    def get_success_url(self):
+        return reverse("share-detail", kwargs={"pk": self.object.share.pk})
+    def dispatch(self, request, *args, **kwargs):
+        fare = self.get_object()
+        if fare.share.creator != self.request.user:
+            return redirect('share-detail', pk=fare.share.pk)
+
+        return super().dispatch(request, *args, **kwargs)
+
+    
+
+
+
+
+
+
 
 
 

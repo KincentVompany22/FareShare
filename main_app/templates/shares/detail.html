@@ -9,8 +9,8 @@ Details
 {% endblock %} 
 
 {% block content %}
-<section class="stamp-container">
-    <div class="stamp-actions">
+<section class="share-container">
+    <div class="share-actions">
         <a href="{% url 'share-index' %}" class="btn">Back to Shares</a>
     </div>
     <div class="share-details">
@@ -43,19 +43,26 @@ Details
     <div class="subsection-title">
       <h2>Fares</h2>
     </div>
+    <div class="fare-container">
     {% if share.fare_set.all.count %}
-    <table>
-      <tbody>
-        {% for fare in share.fare_set.all %}
-          <tr>
-            <td>{{fare.get_category_display|slice:'-2:'}}</td>
-            <td>{{fare.name}}</td>
-            <td>Paid by: {{fare.paid_by}}</td>   
-            <td>{{share.get_currency_display|slice:':1'}}{{fare.amount}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        <div class="fare">
+        <table>
+        <tbody>
+            {% for fare in share.fare_set.all %}
+            
+            <tr>
+                <td>{{fare.get_category_display|slice:'-2:'}}</td>
+                <td>{{fare.name}}</td>
+                <td>Paid by: {{fare.paid_by}}</td>   
+                <td>{{share.get_currency_display|slice:':1'}}{{fare.amount}}
+                <td><a href="{% url 'fare-detail' share.id fare.id %}">Details</td>
+            </tr>
+            </a>
+            {% endfor %}  
+        </div>
+        </tbody>
+        </table>
+    </div>
     {% else %}
     <h3> No fares added yet! </h3>
     {% endif %}

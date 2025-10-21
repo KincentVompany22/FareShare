@@ -12,6 +12,9 @@ urlpatterns = [
     path('shares/<int:pk>/delete/', views.ShareDelete.as_view(), name='share-delete'),
 
     path('shares/<int:share_id>/fare-create/', views.FareCreate.as_view(), name='fare-create'),
+    path('shares/<int:share_id>/fare/<int:pk>/', views.FareDetail.as_view(), name='fare-detail'),
+    path('share/<int:share_id>/fare/<int:pk>/fare-update', views.FareUpdate.as_view(), name='fare-update'),
+    path('share/<int:share_id>/fare/<int:pk>/fare-delete', views.FareDelete.as_view(), name='fare-delete'),
 
     path('accounts/signup/', views.signup, name='signup'),
 
