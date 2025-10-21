@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Share, Fare
-# from .forms import 
+from .forms import FareForm
 
 # Create your views here.
 
@@ -53,6 +53,54 @@ class ShareDetail(DetailView):
     def get_queryset(self):
         return (Share.objects.filter(participants=self.request.user)) # restricts the query set to only participants (inclduing creator)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        share = self.object
+        user = self.request.user
+        fares = share.fare_set.all()
+        
+        total_expenses = sum(f.amount for f in fares)
+
+        my_expenses = 0
+        for fare in fares:
+            count = fare.split_between.count()
+            if count and fare.split_between.filter(pk=user.pk).exists():
+                my_expenses += (fare.amount / count)
+
+        paid_by_me = 0
+        for fare in fares:
+            if fare.paid_by_id == user.id:
+                paid_by_me += fare.amount
+
+        my_balance = paid_by_me - my_expenses
+        
+        participants = list(share.participants.all())
+
+        for p in participants:
+
+            owes = 0
+            for fare in fares:
+                count = fare.split_between.count()
+                if count and fare.split_between.filter(pk=user.pk).exists():
+                    owes += (fare.amount / count)
+            
+            paid = 0
+            for fare in fares:
+                if fare.paid_by_id == p.id:
+                    paid += fare.amount
+
+            net = paid - owes
+
+        context["total_fares"] = fares.count()
+        context["total_expenses"] = total_expenses
+        context["my_expenses"] = my_expenses
+        context["my_balance"] = my_balance
+        context["net"] = net
+       
+        return context
+    
+    
+
 class ShareCreate(LoginRequiredMixin, CreateView):
     model = Share
     fields = ['title', 'currency', 'participants']
@@ -81,7 +129,7 @@ class ShareDelete(LoginRequiredMixin, DeleteView):
 
 class FareCreate(LoginRequiredMixin, CreateView):
     model = Fare
-    fields = ['name', 'amount', 'date', 'category', 'paid_by', 'split_between']
+    form_class = FareForm
 
     def form_valid(self, form):
         form.instance.share_id = self.kwargs['share_id']
