@@ -32,8 +32,38 @@ def signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'signup.html', context)
 
-class Home(LoginView):
+class Login(LoginView):
+    template_name = 'login.html'
+
+class Home(ListView):
+    model = Share
+    context_object_name = 'shares'
     template_name = 'home.html'
+
+    def get_queryset(self):
+        return (Share.objects.all())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        shares = context['shares']
+
+        total_fares = 0
+        for share in shares:
+            total_fares += len(share.fare_set.all())
+
+        total_expenses = 0
+        for share in shares:
+            for fare in share.fare_set.all():
+                total_expenses += fare.amount
+        print(total_expenses)
+       
+        context["total_shares"] = shares.count()
+        context["total_fares"] = total_fares
+        context["total_expenses"] = total_expenses
+        
+
+        return context
+    
 
 def about(request):
     return render(request, 'about.html')

@@ -10,19 +10,17 @@
 
 {% block content %}
 <section class="logo-container">
-  <div class="stamp-container">
+  <div class="share-container">
   </div>
 </section>
 
-{% if not user.is_authenticated %}
-  <section>
-    <form action="{% url 'home' %}" method="post" class="login">
-      <h1>Login</h1>
-      {% csrf_token %} {{ form.as_p }}
-      <input type="hidden" name="next" value="{{ next }}" />
-      <button type="submit" class="btn submit">Login</button>
-    </form>
-  </section>
-{% endif %}
+<section class="home-metrics">
+
+<h1>Total Shares: {{total_shares}}</h1>
+<h1>Total Fares: {{total_fares}}</h1>
+<h1>Fairly Shared Fares: $€£ {{total_expenses}}</h1>
+
+</section>
+
 
 {% endblock %}

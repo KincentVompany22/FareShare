@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
+    path('accounts/signup/', views.signup, name='signup'),
+    path('accounts/login/', views.Login.as_view(), name='login'),
     path('about/', views.about, name='about'),
 
     path('shares/', views.ShareIndex.as_view(), name='share-index'),
@@ -16,7 +18,5 @@ urlpatterns = [
     path('share/<int:share_id>/fare/<int:pk>/fare-update', views.FareUpdate.as_view(), name='fare-update'),
     path('share/<int:share_id>/fare/<int:pk>/fare-delete', views.FareDelete.as_view(), name='fare-delete'),
 
-    path('accounts/signup/', views.signup, name='signup'),
-
-
+    
 ]
