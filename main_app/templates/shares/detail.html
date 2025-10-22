@@ -5,7 +5,7 @@ Details
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/stamps/stamp-detail.css' %}" />
+<link rel="stylesheet" href="{% static 'css/shares/share-detail.css' %}" />
 {% endblock %} 
 
 {% block content %}
@@ -23,11 +23,16 @@ Details
         <p> {{ share.get_currency_display}} </p>
         <p> {{ share.created_at|date:"F Y" }} </p>
 
-        <h3> Participants </h3>
+        <h3> Participant Balances </h3>
             <ul>
-            {% for participant in share.participants.all %}
+            {% for balance in balances %}
                 <li>
-                    {% if participant.id == share.creator_id %} (creator) {% endif %} {{ participant.username}}  {{share.get_currency_display|slice:':1'}}{{ net }} 
+                    {{ balance.participant.username}}:  
+                    {% if balance.net < 0 %}
+                        -{{share.get_currency_display|slice:':1'}}{{ balance.net|slice:"1": }} 
+                    {% else %}
+                        {{share.get_currency_display|slice:':1'}}{{ balance.net }} 
+                    {% endif %}
                 </li>
             {% endfor %}
             </ul>

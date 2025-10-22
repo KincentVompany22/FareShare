@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponse
+
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.contrib.auth.forms import UserCreationForm
+
+from decimal import Decimal, ROUND_HALF_UP # typically used when handling dollar amounts
 
 from .models import Share, Fare
 from .forms import FareForm
@@ -61,41 +64,43 @@ class ShareDetail(DetailView):
         
         total_expenses = sum(f.amount for f in fares)
 
-        my_expenses = 0
+        my_expenses = Decimal("0")
         for fare in fares:
             count = fare.split_between.count()
             if count and fare.split_between.filter(pk=user.pk).exists():
                 my_expenses += (fare.amount / count)
 
-        paid_by_me = 0
-        for fare in fares:
-            if fare.paid_by_id == user.id:
-                paid_by_me += fare.amount
-
-        my_balance = paid_by_me - my_expenses
+        my_expenses = my_expenses.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
         
         participants = list(share.participants.all())
+        balances = []
 
         for p in participants:
 
-            owes = 0
+            owes = Decimal("0")
             for fare in fares:
                 count = fare.split_between.count()
-                if count and fare.split_between.filter(pk=user.pk).exists():
+                if count and fare.split_between.filter(pk=p.pk).exists():
                     owes += (fare.amount / count)
-            
-            paid = 0
+
+            paid = Decimal("0")
             for fare in fares:
-                if fare.paid_by_id == p.id:
+                if fare.paid_by_id == p.pk:
                     paid += fare.amount
 
             net = paid - owes
 
+            owes = owes.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            paid = paid.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            net = net.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+            balances.append({"participant": p, "owes": owes, "paid": paid, "net": net})
+            print(balances)
+
         context["total_fares"] = fares.count()
         context["total_expenses"] = total_expenses
         context["my_expenses"] = my_expenses
-        context["my_balance"] = my_balance
-        context["net"] = net
+        context["balances"] = balances
        
         return context
     
