@@ -61,7 +61,6 @@ class Home(ListView):
         context["total_fares"] = total_fares
         context["total_expenses"] = total_expenses
         
-
         return context
     
 
@@ -78,6 +77,7 @@ class ShareIndex(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return (Share.objects.filter(participants=self.request.user)) # restricts the query set to only participants (inclduing creator)
+
 
 class ShareDetail(DetailView):
     model = Share
@@ -124,17 +124,25 @@ class ShareDetail(DetailView):
             paid = paid.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
             net = net.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-
             balances.append({"participant": p, "owes": owes, "paid": paid, "net": net})
             print(balances)
 
-        context["total_fares"] = fares.count()
-        context["total_expenses"] = total_expenses
-        context["my_expenses"] = my_expenses
-        context["balances"] = balances
-       
-        return context
-    
+            category_totals = {}
+            for fare in fares:
+                label = fare.get_category_display()
+                category_totals[label] = category_totals.get(label, Decimal("0")) + fare.amount
+            sorted_category_totals = dict(sorted(category_totals.items(), key=lambda item: item[1], reverse=True)) # sorting by value in descending order
+            
+
+            context["total_fares"] = fares.count()
+            context["total_expenses"] = total_expenses
+            context["my_expenses"] = my_expenses
+            context["balances"] = balances
+            context["category_totals"] = sorted_category_totals
+
+            return context
+
+
 class ShareCreate(LoginRequiredMixin, CreateView):
     model = Share
     fields = ['title', 'currency', 'participants']

@@ -15,11 +15,11 @@ Details
     </div>
     <div class="share-details">
         <h2> {{ share.title }} </h2>
-    <div class="share-metrics">
-        <p> Total Fares: {{ total_fares }} </p>
-        <p> My Expenses: {{share.get_currency_display|slice:':1'}}{{ my_expenses }} </p>
-        <p> Total Expenses: {{share.get_currency_display|slice:':1'}}{{ total_expenses }} </p>
-    </div>
+        <div class="share-metrics">
+            <p> Total Fares: {{ total_fares }} </p>
+            <p> My Expenses: {{share.get_currency_display|slice:':1'}}{{ my_expenses }} </p>
+            <p> Total Expenses: {{share.get_currency_display|slice:':1'}}{{ total_expenses }} </p>
+        </div>
         <p> {{ share.get_currency_display}} </p>
         <p> {{ share.created_at|date:"F Y" }} </p>
 
@@ -40,6 +40,13 @@ Details
             <a href="{% url 'share-delete' share.id %}" class="btn danger">Delete</a>
           {% endif %}
         </div>
+        <div class="share-categories">
+            <h3> Categories </h3>
+            {% for label, total in category_totals.items %}
+                <li> {{ label }}: {{share.get_currency_display|slice:':1'}}{{ total }} </li>
+            {% endfor %}
+        </div>
+
     </div>
 </section>
 
