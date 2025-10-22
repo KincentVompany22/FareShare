@@ -67,6 +67,7 @@ Details
             <tr>
                 <td>{{fare.get_category_display|slice:'-2:'}}</td>
                 <td>{{fare.name}}</td>
+                <td>{{fare.date}}</td>
                 <td>Paid by: {{fare.paid_by}}</td>   
                 <td>{{share.get_currency_display|slice:':1'}}{{fare.amount}}
                 <td><a href="{% url 'fare-detail' share.id fare.id %}">Details</td>
