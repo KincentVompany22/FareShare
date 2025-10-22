@@ -1,5 +1,6 @@
 from django import forms 
 from .models import Fare
+from django.contrib.auth import get_user_model
 
 class FareForm(forms.ModelForm):
     class Meta:

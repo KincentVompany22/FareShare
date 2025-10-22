@@ -94,6 +94,7 @@ class ShareDetail(DetailView):
             paid = paid.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
             net = net.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
+
             balances.append({"participant": p, "owes": owes, "paid": paid, "net": net})
             print(balances)
 
@@ -104,8 +105,6 @@ class ShareDetail(DetailView):
        
         return context
     
-    
-
 class ShareCreate(LoginRequiredMixin, CreateView):
     model = Share
     fields = ['title', 'currency', 'participants']
@@ -147,7 +146,6 @@ class FareCreate(LoginRequiredMixin, CreateView):
 
     def get_form(self): # renders correct info in form
         form = super().get_form()
-        form.fields['split_between'].required = False
         form.fields['split_between'].queryset = self.share.participants.all() # limit form field to only show Share participants
         form.fields['paid_by'].queryset = self.share.participants.all() # limit form field to only show Share participants
         return form
@@ -162,7 +160,6 @@ class FareDetail(LoginRequiredMixin, DetailView):
             Share.objects.filter(participants=request.user).distinct(), pk=self.kwargs['share_id'])
         return super().dispatch(request, *args, **kwargs)
 
-
 class FareUpdate(LoginRequiredMixin, UpdateView):
     model = Fare
     fields = ['name', 'amount', 'date', 'category', 'paid_by', 'split_between']
@@ -174,7 +171,6 @@ class FareUpdate(LoginRequiredMixin, UpdateView):
 
     def get_form(self): # renders correct info in form
         form = super().get_form()
-        form.fields['split_between'].required = False
         form.fields['split_between'].queryset = self.share.participants.all() # limit form field to only show Share participants
         form.fields['paid_by'].queryset = self.share.participants.all() # limit form field to only show Share participants
         return form

@@ -28,11 +28,8 @@ Details
             {% for balance in balances %}
                 <li>
                     {{ balance.participant.username}}:  
-                    {% if balance.net < 0 %}
-                        -{{share.get_currency_display|slice:':1'}}{{ balance.net|slice:"1": }} 
-                    {% else %}
-                        {{share.get_currency_display|slice:':1'}}{{ balance.net }} 
-                    {% endif %}
+                    {% if balance.net < 0 %} - {% endif %}
+                    {{share.get_currency_display|slice:':1'}}{{ balance.net|floatformat:2|cut:"-"}} 
                 </li>
             {% endfor %}
             </ul>
