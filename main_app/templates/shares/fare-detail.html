@@ -12,7 +12,7 @@ Details
 
 <section class="fares">
     <div class="fare-actions">
-        <a href="{% url 'share-detail' fare.share.id %}" class="btn">Back to {{fare.share.title}} Share</a>
+        <a href="{% url 'share-detail' fare.share.id %}" class="btn">Back to Share</a>
     </div>
     
     <div class="subsection-title">
@@ -31,7 +31,7 @@ Details
         {% endfor %}
     </ul>
     <a href="{% url 'fare-update' fare.share.id fare.id %}" class="btn warn">Edit</a>
-    <a href="{% url 'fare-delete' fare.share.id fare.id %}" class="btn warn">Delete</a>
+    <a href="{% url 'fare-delete' fare.share.id fare.id %}" class="btn danger">Delete</a>
 
 </section>
 

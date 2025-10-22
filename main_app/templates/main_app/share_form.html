@@ -9,8 +9,10 @@
 <div class="page-header">
   {% if share %}
   <h1> Edit {{share.title}} Share</h1>
+  <a href="{% url 'share-detail' share.id %}" class="btn">Back to Share</a>
   {% else %}
   <h1>Add a Share</h1>
+  <a href="{% url 'share-index' %}" class="btn">Back to Shares</a>
   {% endif %}
 </div>
 

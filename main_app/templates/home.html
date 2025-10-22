@@ -11,14 +11,18 @@
 {% block content %}
 <section class="logo-container">
   <div class="share-container">
+    <img src="{% static 'images/Logo.svg' %}" alt="FareShare Logo" />
   </div>
 </section>
+
+<h1> Fairly Share Every Fare </h1>
 
 <section class="home-metrics">
 
 <h1>Total Shares: {{total_shares}}</h1>
 <h1>Total Fares: {{total_fares}}</h1>
-<h1>Fairly Shared Fares: $€£ {{total_expenses}}</h1>
+<h1>Total Expenses: <span class="currency">$€£ {{ total_expenses }}</span></h1>
+
 
 </section>
 

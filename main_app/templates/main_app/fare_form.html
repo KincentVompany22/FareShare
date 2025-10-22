@@ -9,9 +9,13 @@
 <div class="page-header">
   {% if fare %}
   <h1> Edit {{fare.name}} Fare</h1>
+  <a href="{% url 'share-detail' pk=object.share_id %}" class="btn">Back to Share</a>
   {% else %}
   <h1>Add Fare</h1>
+  <a href="{% url 'share-detail' pk=view.kwargs.share_id %}" class="btn">Back to Share</a>
   {% endif %}
+  
+  
 </div>
 
 <form action="" method="post" class="form-container">

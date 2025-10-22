@@ -132,11 +132,12 @@ class ShareDetail(DetailView):
 
             balances.append({"participant": p, "owes": owes, "paid": paid, "net": net})
             print(balances)
+            sorted_balances = sorted(balances, key=lambda p: (p["participant"].id != user.id)) # sorts logged in user first
             
         context["total_fares"] = fares.count()
         context["total_expenses"] = total_expenses
         context["my_expenses"] = my_expenses
-        context["balances"] = balances
+        context["balances"] = sorted_balances
         context["category_totals"] = sorted_category_totals
 
         return context
@@ -198,7 +199,7 @@ class FareDetail(LoginRequiredMixin, DetailView):
 
 class FareUpdate(LoginRequiredMixin, UpdateView):
     model = Fare
-    fields = ['name', 'amount', 'date', 'category', 'paid_by', 'split_between']
+    form_class = FareForm
 
     def dispatch(self, request, *args, **kwargs): # protects URL route from those who do not have access
         self.share = get_object_or_404( # Django shortcut to return single object and if not found generate 404

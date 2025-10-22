@@ -1,86 +1,172 @@
+/* ========= Layout (unchanged structure, cleaner look) ========= */
 main {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  height: 100%;
+  min-height: 60vh; /* less jumpy than 100% */
 }
 
 main > section {
   width: 100%;
-  padding: 10px 8px;
+  padding: 14px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.header-logo-container {
-  display: none;
+/* Hide header logo slot on this page */
+.header-logo-container { display: none; }
+
+/* ========= Hero / Logo area ========= */
+.logo-container { max-width: 420px; }
+.share-container { width: 80%; }
+
+/* ========= Metrics section ========= */
+.home-metrics {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 10px;
+  padding: 10px;
 }
 
-.logo-container {
-  max-width: 375px;
+.home-metrics h1 {
+  /* turn each H1 into a “metric card” */
+  width: 100%;
+  margin: 0;
+  padding: 14px 16px;
+  font-weight: 700;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.35;
+  color: var(--ink);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.86)),
+    radial-gradient(1200px 200px at 0% -10%, rgba(31,122,90,0.10), transparent 60%);
+  border: 1px solid rgba(31,122,90,0.18); /* uses --brand family */
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.share-container {
-  width: 80%;
+/* Highlight numbers slightly for scannability */
+.home-metrics h1::after {
+  content: "";
 }
 
+.home-metrics h1 span,
+.home-metrics h1 strong,
+.home-metrics h1 em {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--brand-700);
+}
+
+/* Optional: subtle left accent bar */
+.home-metrics h1 {
+  position: relative;
+}
+.home-metrics h1::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 6px;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+  background: linear-gradient(180deg, var(--brand), var(--brand-700));
+  opacity: .9;
+}
+
+/* Tighten currency look in “Total Expenses” */
+.home-metrics h1:has(> .currency) {
+  font-variant-numeric: tabular-nums;
+}
+.currency { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+/* ========= Login block (unchanged HTML) ========= */
 .login {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 80%;
+  align-items: stretch;
+  width: 100%;
+  max-width: 560px;
+  background: var(--paper);
+  border-radius: var(--radius);
+  border: 1px solid rgba(31,122,90,0.16);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
 }
 
 .login h1 {
-  font-size: clamp(3.2rem, 3vw, 4.8rem);
-  margin: 10px 0;
+  font-size: clamp(1.8rem, 2.6vw, 2.2rem);
+  margin: 6px 0 14px;
+  color: var(--brand-700);
 }
 
 .login > p {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 14px 0 0px;
+  margin: 12px 0 0;
 }
 
 .login label {
-  font-size: var(--font-reg);
+  font-size: 0.95rem;
   margin-bottom: 6px;
+  color: var(--muted);
 }
 
 .login input {
-  font-size: var(--font-l);
-  padding: 2px 4px;
+  font-size: 1rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(2,6,23,0.12);
+  background: #fff;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.login input:focus {
+  border-color: rgba(31,122,90,0.45);
+  box-shadow: 0 0 0 3px rgba(31,122,90,0.15);
 }
 
 .login .btn {
   align-self: flex-end;
-  margin-right: 0;
   margin-top: 16px;
 }
 
+/* ========= Responsive ========= */
+@media only screen and (min-width: 640px) {
+  .home-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media only screen and (min-width: 900px) {
+  .home-metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media only screen and (min-width: 768px) {
-  main {
-    justify-content: space-around;
-  }
+  main { justify-content: space-around; }
+  main > section { width: 46%; }
+  .logo-container { max-width: 520px; }
+}
 
-  main > section {
-    width: 40%;
-  }
-
-  .login {
-    border: var(--borders);
-    padding: 20px;
-    border-radius: var(--card-border-radius);
-    box-shadow: var(--card-box-shadow);
-    width: 100%;
-  }
-
-  .logo-container {
-    max-width: 520px;
-  }
+/* ========= Nice-to-haves (optional classes you can drop into HTML later) ========= */
+/* .muted text tone */
+.text-muted { color: var(--muted); }
+/* subtle green pill you can reuse */
+.pill {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.25rem .55rem; border-radius:999px;
+  background: var(--brand-tint); color: var(--brand-700);
+  border: 1px solid rgba(31,122,90,0.18);
+  font-weight: 600; font-size: .9rem;
 }

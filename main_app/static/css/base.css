@@ -1,11 +1,18 @@
 /* ===== Brand theme ===== */
 :root{
-  --brand:        rgba(35,77,60,1);     /* forest green */
-  --brand-700:    rgba(35,77,60,0.9);
-  --navy:         rgba(26,41,66,1);     /* deep navy */
-  --navy-100:     rgba(26,41,66,0.08);
+  /* Greens */
+  --brand:        #1f7a5a;                /* emerald */
+  --brand-700:    #165a43;                /* deeper emerald */
+  --brand-500:    #259e74;                /* brighter accent */
+  --brand-tint:   rgba(31,122,90,.08);    /* soft green wash */
+
+  /* Dark “navy” swapped for deep green */
+  --navy:         #0e3b2d;                /* deep forest */
+  --navy-100:     rgba(14,59,45,0.10);
+
+  /* Neutrals */
   --paper:        #ffffff;
-  --paper-2:      #f8fafc;
+  --paper-2:      #f6faf8;                /* slight mint tint background */
   --ink:          #0f172a;
   --muted:        #64748b;
 
@@ -23,13 +30,26 @@ body{
   font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
 }
 
-a{ color: var(--brand); text-decoration: none; }
+/* Text selection & focus ring lean green */
+::selection{ background: var(--brand-tint); color: inherit; }
+:focus-visible{
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+a{
+  color: var(--brand);
+  text-decoration: none;
+  transition: color .15s ease, opacity .15s ease;
+}
 a:hover{ color: var(--brand-700); }
 
 /* ===== Header / Nav ===== */
 header{
-  background: var(--navy);
-  color: #fff;
+  /* subtle green gradient for depth */
+  background: linear-gradient(180deg, var(--navy) 0%, #0b2f24 100%);
+  color: #e8fff6;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   box-shadow: var(--shadow-sm);
   position: sticky; top: 0; z-index: 50;
@@ -56,20 +76,27 @@ nav li a{
   align-items: center;
   padding: 8px 12px;
   border-radius: 10px;
-  color: #e7eef8;            /* soft white */
+  color: #dbfff0;                          /* soft mint white */
   font-weight: 600;
   transition: background .15s ease, color .15s ease, transform .06s ease;
 }
 
 nav li a:hover{
-  background: rgba(255,255,255,0.1);
-  color: #fff;
+  background: rgba(255,255,255,0.12);
+  color: #ffffff;
   transform: translateY(-1px);
+}
+
+/* Optional: mark current page (set class="active" on the link in the template) */
+nav li a.active,
+nav li a[aria-current="page"]{
+  background: rgba(255,255,255,0.18);
+  color: #fff;
 }
 
 #logout-form button {
   text-decoration: none;
-  color: var(--text-color);
+  color: #dbfff0;
   font-weight: 600;
   font-size: 16px;
   background: none;
@@ -78,18 +105,7 @@ nav li a:hover{
   padding: 0;
   font-family: inherit;
 }
-
-#logout-form button:hover {
-  color: var(--link-hover-color);
-}
-
-
-/* Optional: mark current page (set class="active" on the link in the template) */
-nav li a.active,
-nav li a[aria-current="page"]{
-  background: rgba(255,255,255,0.18);
-  color: #fff;
-}
+#logout-form button:hover { color: #ffffff; }
 
 /* ===== Main layout ===== */
 main{
@@ -100,7 +116,33 @@ main{
 
 /* ===== Utility ===== */
 .container{ max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* divider gets a soft green hue */
 .hr{ height:1px; background: var(--navy-100); border:0; margin:16px 0; }
+
+/* Subtle green cards if you use them */
+.card{
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(31,122,90,0.12);
+}
+
+/* Basic button that matches new accent (optional) */
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.55rem .9rem; border-radius:10px; border:1px solid transparent;
+  background: var(--brand); color:#fff; font-weight:600;
+  transition: transform .06s ease, background .2s ease, box-shadow .2s ease;
+}
+.btn:hover{ background: var(--brand-700); transform: translateY(-1px); }
+.btn.outline{
+  background: transparent; color: var(--brand);
+  border-color: rgba(31,122,90,0.35);
+}
+.btn.outline:hover{
+  background: var(--brand-tint);
+}
 
 /* ===== Responsive tweaks ===== */
 @media (max-width: 640px){
@@ -109,5 +151,3 @@ main{
   nav li a{ padding: 7px 10px; }
   main{ padding: 0 14px 28px; }
 }
-
-
