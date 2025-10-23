@@ -1,38 +1,64 @@
 {% extends 'base.html' %} {% load static %} 
 
 {% block title %}
-Details
+    FareShare - Fare Details
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/shares/share-detail.css' %}" />
+<link rel="stylesheet" href="{% static 'css/shares/fare-detail.css' %}" />
 {% endblock %} 
 
 {% block content %}
+<section class="fare-container">
 
-<section class="fares">
-    <div class="fare-actions">
-        <a href="{% url 'share-detail' fare.share.id %}" class="btn">Back to Share</a>
+  <div class="fare-actions top">
+    <a href="{% url 'share-detail' fare.share.id %}" class="btn">Back to Share</a>
+  </div>
+
+  <header class="fare-header card">
+    <div class="fare-header-row">
+      <h2 class="fare-title">
+        {{ fare.get_category_display|slice:'-2:' }} {{ fare.name }}
+      </h2>
+      <span class="pill">{{ fare.date }}</span>
     </div>
-    
-    <div class="subsection-title">
-      <h2>{{fare.get_category_display|slice:'-2:'}} {{fare.name}}</h2>
-      <h3> {{fare.date}} </h3>
+
+    <div class="fare-metrics">
+      <div class="metric-chip">
+        <span class="metric-label">Amount</span>
+        <span class="metric-value">
+          {{ fare.share.get_currency_display|slice:':1' }}{{ fare.amount }}
+        </span>
+      </div>
+      <div class="metric-chip">
+        <span class="metric-label">Paid By</span>
+        <span class="metric-value">{{ fare.paid_by }}</span>
+      </div>
+      <div class="metric-chip">
+        <span class="metric-label">Share</span>
+        <span class="metric-value">{{ fare.share.title }}</span>
+      </div>
     </div>
-    
-    <p>Paid by: {{fare.paid_by}}</p>   
-    <p>{{fare.share.get_currency_display|slice:':1'}} {{fare.amount}} </p>
-    <h3> Split Between </h3>
-    <ul>
-        {% for split in fare.split_between.all %}
-            <li>
-                {{ split.username}}
-            </li>
-        {% endfor %}
+  </header>
+
+  <section class="fare-details card">
+    <h3>Split Between</h3>
+    <ul class="split-list">
+      {% for split in fare.split_between.all %}
+      <li class="split-item">
+        <span class="avatar" aria-hidden="true">
+          {{ split.username|first|upper }}
+        </span>
+        <span class="name">{{ split.username }}</span>
+      </li>
+      {% endfor %}
     </ul>
-    <a href="{% url 'fare-update' fare.share.id fare.id %}" class="btn warn">Edit</a>
-    <a href="{% url 'fare-delete' fare.share.id fare.id %}" class="btn danger">Delete</a>
+
+    <div class="fare-actions right">
+      <a href="{% url 'fare-update' fare.share.id fare.id %}" class="btn warn">Edit</a>
+      <a href="{% url 'fare-delete' fare.share.id fare.id %}" class="btn danger">Delete</a>
+    </div>
+  </section>
 
 </section>
-
-{% endblock %} 
+{% endblock %}

@@ -1,39 +1,209 @@
-.form-container {
+/* ===== Generic form card ===== */
+.form-container,
+.login {
+  max-width: 820px;
+  margin: 12px auto 28px;
+  padding: 20px;
+  background: var(--paper);
+  border: 1px solid rgba(31,122,90,0.14);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Page header alignment helper (works with your existing .page-header) */
+.page-header {
+  max-width: 820px;
+  margin: 10px auto 12px;
+  padding: 0 4px;
   display: flex;
-  flex-direction: column;
-  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-table {
-  padding: 0 40px;
+/* ===== Django table-based forms ===== */
+.form-container table {
   width: 100%;
-  border-spacing: 0 20px;
+  border-collapse: separate;
+  border-spacing: 0 14px; /* vertical rhythm between rows */
+  padding: 0;             /* card provides padding */
 }
 
-th {
-  text-align: left;
-  padding: 6px 20px 0 0;
-  font-weight: normal;
+.form-container th,
+.form-container td {
   vertical-align: top;
-  font-size: var(--font-reg);
 }
 
-td {
-  max-width: 60%;
+.form-container th {
+  width: 30%;
+  padding: 4px 14px 0 0;
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: .2px;
 }
 
-td > * {
+.form-container td {
+  width: 70%;
+}
+
+/* Inputs / selects / textareas */
+.form-container td > input,
+.form-container td > select,
+.form-container td > textarea {
   width: 100%;
-  padding: 2px 4px;
-  font-size: var(--font-l);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(2,6,23,0.12);
+  background: #fff;
+  font: inherit;
+  line-height: 1.35;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .2s ease;
 }
 
-td > textarea {
-  height: calc(4 * var(--font-l) + 8px);
-  font-family: inherit;
+.form-container td > textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
-.btn {
+/* Focus ring (brand) */
+.form-container td > input:focus,
+.form-container td > select:focus,
+.form-container td > textarea:focus {
+  border-color: rgba(31,122,90,0.45);
+  box-shadow: 0 0 0 3px rgba(31,122,90,0.15);
+}
+
+/* Disabled / readonly */
+.form-container td > input[disabled],
+.form-container td > select[disabled],
+.form-container td > textarea[disabled] {
+  background: #f7faf9;
+  color: var(--muted);
+}
+
+/* Help text (Django's default .helptext) */
+.helptext {
+  display: block;
+  margin-top: 6px;
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+/* Error list (Django's default .errorlist) */
+.errorlist {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.errorlist li {
+  margin: 0 0 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(185,28,28,0.08);
+  color: #b91c1c;
+  border: 1px solid rgba(185,28,28,0.18);
+  font-weight: 700;
+}
+
+/* Checkbox / radio alignment */
+.form-container input[type="checkbox"],
+.form-container input[type="radio"] {
+  width: auto;
+  margin-right: 8px;
+  transform: translateY(1px);
+}
+
+/* Date / number inputs keep same look */
+.form-container input[type="date"],
+.form-container input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Submit button alignment */
+.form-container .btn.submit,
+.login .btn.submit {
   align-self: flex-end;
-  margin-right: 40px;
+  margin-top: 10px;
+}
+
+/* Make the submit feel a touch more “primary” */
+.form-container .btn.submit:hover,
+.login .btn.submit:hover {
+  transform: translateY(-1px);
+}
+
+/* ===== Login form when using {{ form.as_p }} ===== */
+.login h1 {
+  margin: 0 0 10px;
+  color: var(--brand-700);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+}
+
+.login p {
+  margin: 0 0 12px;
+}
+
+.login label {
+  display: block;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.login input[type="text"],
+.login input[type="password"],
+.login input[type="email"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(2,6,23,0.12);
+  background: #fff;
+  outline: none;
+}
+.login input:focus {
+  border-color: rgba(31,122,90,0.45);
+  box-shadow: 0 0 0 3px rgba(31,122,90,0.15);
+}
+
+/* ===== Nice-to-haves ===== */
+/* Required asterisk (works if you add the 'required' attribute on inputs) */
+.form-container td > input[required],
+.form-container td > select[required],
+.form-container td > textarea[required] { background-clip: padding-box; }
+.form-container th::after {
+  content: attr(data-required);
+  /* If you want automatic asterisks, you can inject them in templates:
+     <th data-required=" *">Label</th> */
+  color: #dc2626;
+  font-weight: 800;
+}
+
+/* ===== Responsive: stack label & input on small screens ===== */
+@media (max-width: 640px) {
+  .form-container,
+  .login { padding: 16px; }
+
+  .form-container table,
+  .form-container tbody,
+  .form-container tr,
+  .form-container th,
+  .form-container td {
+    display: block;
+    width: 100%;
+  }
+
+  .form-container th {
+    padding: 0 0 6px;
+  }
+
+  .form-container td {
+    margin-bottom: 12px;
+  }
+
+  .form-container .btn.submit {
+    margin-right: 0; /* aligns to right edge of card naturally */
+  }
 }

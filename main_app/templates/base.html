@@ -27,8 +27,12 @@
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'share-index' %}">View Shares</a></li>
             <li><a href="{% url 'share-create' %}">Create Share</a></li>
-            <li>{{user.username}} Account </li>
-            <li>
+
+            <li class="nav-right">
+              <span class="user-pill" title="Signed in">
+                <span class="dot" aria-hidden="true"></span>
+                {{ user.username }}
+              </span>
               <form id="logout-form" method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit">Log out</button>

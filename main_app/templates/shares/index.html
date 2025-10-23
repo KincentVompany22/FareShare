@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %}
 
 {% block title %}
-Shares
+    FareShare - Your Shares
 {% endblock %}
 
 {% block head %}
@@ -11,20 +11,27 @@ Shares
 {% block content %}
 
 <section class="page-header">
-    <h1> Your Shares!</h1>
-    <a href="{% url 'share-create' %}">Create Share</a>
+  <h1>Your Shares</h1>
+  <a class="btn" href="{% url 'share-create' %}">Create Share</a>
 </section>
 
+{% if shares %}
 <section class="card-container">
   {% for share in shares %}
-  <div class="card">
-    <a href="{% url 'share-detail' share.id %}">
-      <h2 class="card-title">{{ share.title }}</h2>
-      <p> {{ share.created_at|date:"F Y" }} </p>
-    </a>
-  </div>
+    <div class="card share-card">
+      <a class="card-link" href="{% url 'share-detail' share.id %}">
+        <h2 class="card-title">{{ share.title }}</h2>
+        <p class="card-meta">{{ share.created_at|date:"F Y" }}</p>
+      </a>
+    </div>
   {% endfor %}
 </section>
-
+{% else %}
+  <div class="empty card">
+    <h2>No shares yet</h2>
+    <p class="text-muted">Create your first trip or event to start logging fares.</p>
+    <a class="btn outline" href="{% url 'share-create' %}">Create Share</a>
+  </div>
+{% endif %}
 
 {% endblock %}

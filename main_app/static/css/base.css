@@ -107,6 +107,54 @@ nav li a[aria-current="page"]{
 }
 #logout-form button:hover { color: #ffffff; }
 
+nav ul li.nav-right{
+  margin-left: auto;              
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#logout-form { display: inline; margin: 0; }
+#logout-form button{
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #dbfff0;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, transform .06s ease;
+}
+#logout-form button:hover{
+  background: rgba(255,255,255,0.12);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Username pill */
+.user-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #e8fff6;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-weight: 600;
+  line-height: 1;
+}
+.user-pill .dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-500);
+  box-shadow: 0 0 0 3px rgba(37,158,116,0.25);
+}
+
+
 /* ===== Main layout ===== */
 main{
   max-width: 1100px;
@@ -143,6 +191,27 @@ main{
 .btn.outline:hover{
   background: var(--brand-tint);
 }
+
+/* Ensure button text stays readable on hover/focus/visited */
+.btn,
+.btn:link,
+.btn:visited,
+.btn:hover,
+.btn:focus {
+  color: #fff;
+}
+
+/* Outline variant keeps brand color */
+.btn.outline,
+.btn.outline:link,
+.btn.outline:visited {
+  color: var(--brand);
+}
+.btn.outline:hover,
+.btn.outline:focus {
+  color: var(--brand-700);
+}
+
 
 /* ===== Responsive tweaks ===== */
 @media (max-width: 640px){

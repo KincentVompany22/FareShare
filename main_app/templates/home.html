@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} 
 
 {% block title %}
-    Home
+    FareShare
 {% endblock %}
 
 {% block head %}
@@ -9,21 +9,33 @@
 {% endblock %} 
 
 {% block content %}
-<section class="logo-container">
-  <div class="share-container">
-    <img src="{% static 'images/Logo.svg' %}" alt="FareShare Logo" />
+<section class="hero">
+  <div class="logo-container">
+    <div class="share-container">
+      <img src="{% static 'images/Logo.svg' %}" alt="FareShare Logo" />
+    </div>
   </div>
-</section>
 
-<h1> Fairly Share Every Fare </h1>
+  <h1 class="tagline">
+    <span>Fairly</span> Share Every <span>Fare</span>
+  </h1>
+  <p class="subtagline">Split costs, not friendships</p>
+</section>
 
 <section class="home-metrics">
+  <div class="metric card">
+    <div class="metric-value">{{ total_shares }}</div>
+    <div class="metric-label">Total Shares</div>
+  </div>
 
-<h1>Total Shares: {{total_shares}}</h1>
-<h1>Total Fares: {{total_fares}}</h1>
-<h1>Total Expenses: <span class="currency">$€£ {{ total_expenses }}</span></h1>
+  <div class="metric card">
+    <div class="metric-value">{{ total_fares }}</div>
+    <div class="metric-label">Total Fares</div>
+  </div>
 
-
+  <div class="metric card">
+    <div class="metric-value currency">{{ total_expenses }}</div>
+    <div class="metric-label">Total Expenses</div>
+  </div>
 </section>
-
 {% endblock %}

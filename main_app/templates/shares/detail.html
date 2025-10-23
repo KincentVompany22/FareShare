@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} 
 
 {% block title %}
-Details
+    FareShare - Share Details
 {% endblock %}
 
 {% block head %}
@@ -10,77 +10,117 @@ Details
 
 {% block content %}
 <section class="share-container">
-    <div class="share-actions">
-        <a href="{% url 'share-index' %}" class="btn">Back to Shares</a>
+
+  <div class="share-actions">
+    <a href="{% url 'share-index' %}" class="btn">Back to Shares</a>
+  </div>
+
+  <header class="share-header card">
+    <div class="share-header-row">
+      <h2 class="share-title">{{ share.title }}</h2>
+      <div class="share-meta">
+        <span class="pill">{{ share.get_currency_display }}</span>
+        <span class="pill">{{ share.created_at|date:"F Y" }}</span>
+      </div>
     </div>
-    <div class="share-details">
-        <h2> {{ share.title }} </h2>
-        <div class="share-metrics">
-            <p> Total Fares: {{ total_fares }} </p>
-            <p> My Expenses: {{share.get_currency_display|slice:':1'}}{{ my_expenses }} </p>
-            <p> Total Expenses: {{share.get_currency_display|slice:':1'}}{{ total_expenses }} </p>
-        </div>
-        <p> {{ share.get_currency_display}} </p>
-        <p> {{ share.created_at|date:"F Y" }} </p>
 
-        <h3> Participant Balances </h3>
-            <ul>
-            {% for balance in balances %}
-                <li>
-                    {{ balance.participant.username}}:  
-                    {% if balance.net < 0 %} - {% endif %}
-                    {{share.get_currency_display|slice:':1'}}{{ balance.net|floatformat:2|cut:"-"}} 
-                </li>
-            {% endfor %}
-            </ul>
-    
-        <div class="share-actions">
-          {% if share.creator == request.user %}
-            <a href="{% url 'share-update' share.id %}" class="btn warn">Edit</a>
-            <a href="{% url 'share-delete' share.id %}" class="btn danger">Delete</a>
-          {% endif %}
-        </div>
-        <div class="share-categories">
-            <h3> Categories </h3>
-            {% for label, total in category_totals.items %}
-                <li> {{ label }}: {{share.get_currency_display|slice:':1'}}{{ total }} </li>
-            {% endfor %}
-        </div>
-
+    <div class="share-metrics">
+      <div class="metric-chip">
+        <span class="metric-label">Total Fares</span>
+        <span class="metric-value">{{ total_fares }}</span>
+      </div>
+      <div class="metric-chip">
+        <span class="metric-label">My Expenses</span>
+        <span class="metric-value">
+          {{ share.get_currency_display|slice:':1' }}{{ my_expenses }}
+        </span>
+      </div>
+      <div class="metric-chip">
+        <span class="metric-label">Total Expenses</span>
+        <span class="metric-value">
+          {{ share.get_currency_display|slice:':1' }}{{ total_expenses }}
+        </span>
+      </div>
     </div>
-</section>
+  </header>
 
-<section class="fares">
-    
-    <a href="{% url 'fare-create' share.id %}" class="btn">Add Fare</a>
-    
+  <section class="share-details card">
+    <h3>Participant Balances</h3>
+    <ul class="balance-list">
+      {% for balance in balances %}
+      <li class="balance-row">
+        <span class="participant">{{ balance.participant.username }}</span>
+        <span class="amount {% if balance.net < 0 %}neg{% else %}pos{% endif %}">
+          {% if balance.net < 0 %}−{% endif %}
+          {{ share.get_currency_display|slice:':1' }}{{ balance.net|floatformat:2|cut:"-" }}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% if share.creator == request.user %}
+    <div class="share-actions right">
+      <a href="{% url 'share-update' share.id %}" class="btn warn">Edit</a>
+      <a href="{% url 'share-delete' share.id %}" class="btn danger">Delete</a>
+    </div>
+    {% endif %}
+
+    <div class="share-categories">
+      <h3>Categories</h3>
+      <ul class="category-list">
+        {% for label, total in category_totals.items %}
+        <li>
+          <span class="category-name">{{ label }}</span>
+          <span class="category-total">
+            {{ share.get_currency_display|slice:':1' }}{{ total }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <section class="fares card">
     <div class="subsection-title">
       <h2>Fares</h2>
+      <a href="{% url 'fare-create' share.id %}" class="btn">Add Fare</a>
     </div>
-    <div class="fare-container">
+
     {% if share.fare_set.all.count %}
-        <div class="fare">
-        <table>
+    <div class="table-scroll">
+      <table class="fare-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Paid By</th>
+            <th class="num">Amount</th>
+            <th></th>
+          </tr>
+        </thead>
         <tbody>
-            {% for fare in share.fare_set.all %}
-            
-            <tr>
-                <td>{{fare.get_category_display|slice:'-2:'}}</td>
-                <td>{{fare.name}}</td>
-                <td>{{fare.date}}</td>
-                <td>Paid by: {{fare.paid_by}}</td>   
-                <td>{{share.get_currency_display|slice:':1'}}{{fare.amount}}
-                <td><a href="{% url 'fare-detail' share.id fare.id %}">Details</td>
-            </tr>
-            </a>
-            {% endfor %}  
-        </div>
+          {% for fare in share.fare_set.all %}
+          <tr>
+            <td>{{ fare.get_category_display|slice:'-2:' }}</td>
+            <td>{{ fare.name }}</td>
+            <td>{{ fare.date }}</td>
+            <td>{{ fare.paid_by }}</td>
+            <td class="num">
+              {{ share.get_currency_display|slice:':1' }}{{ fare.amount }}
+            </td>
+            <td class="actions">
+              <a class="link" href="{% url 'fare-detail' share.id fare.id %}">Details</a>
+            </td>
+          </tr>
+          {% endfor %}
         </tbody>
-        </table>
+      </table>
     </div>
     {% else %}
-    <h3> No fares added yet! </h3>
+      <h3 class="text-muted">No fares added yet!</h3>
     {% endif %}
-</section>
+  </section>
 
-{% endblock %} 
+</section>
+{% endblock %}

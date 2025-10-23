@@ -1,16 +1,30 @@
 {% extends 'base.html' %}  {% load static %} 
+
+{% block title %}
+    FareShare - Confirm Delete
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/confirm-delete.css' %}" />
+{% endblock %} 
+
 {% block content %}
+<section class="confirm card">
+  <div class="confirm-header">
+    <div>
+      <h1 class="title">Delete Fare?</h1>
+      <p class="lead text-muted">This action cannot be undone.</p>
+    </div>
+  </div>
 
-<div class="page-header">
-  <h1>Delete Share?</h1>
-</div>
+  <p class="message">
+    Are you sure you want to delete the fare <strong>{{ fare.name }}</strong>?
+  </p>
 
-<h2>Are you sure you want to delete your {{ fare.name }} share?</h2>
-
-<form action="" method="post" class="form">
-  {% csrf_token %}
-  <a href="{% url 'fare-detail' fare.share.id fare.id  %}" class="btn secondary">Cancel</a>
-  <button type="submit" class="btn danger">Yes - Delete!</button>
-</form>
-
+  <form action="" method="post" class="actions">
+    {% csrf_token %}
+    <a href="{% url 'fare-detail' fare.share.id fare.id %}" class="btn outline">Cancel</a>
+    <button type="submit" class="btn danger">Yes — Delete</button>
+  </form>
+</section>
 {% endblock %}

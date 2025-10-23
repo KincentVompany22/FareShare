@@ -1,0 +1,114 @@
+/* ===== About page (uses variables from base.css) ===== */
+
+.about{
+  max-width: 980px;
+  margin: 22px auto 36px;
+  padding: 0 18px;
+}
+
+/* --- Hero --- */
+.about-hero{
+  background:
+    linear-gradient(180deg, var(--navy) 0%, #0b2f24 100%);
+  color: #e8fff6;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.about-hero h1{
+  margin: 0 0 6px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: .2px;
+  font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+}
+
+.about-hero .lead{
+  margin: 0;
+  font-weight: 600;
+  color: #dbfff0;
+  opacity: .95;
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
+}
+
+/* --- Body card --- */
+.about-body{
+  margin-top: 14px;
+  background: var(--paper);
+  border: 1px solid rgba(31,122,90,0.14);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 22px;
+  color: var(--ink);
+}
+
+.about-body p{
+  margin: 0 0 12px;
+}
+
+.about-body em{
+  font-style: normal;
+  color: var(--brand-700);
+  font-weight: 700;
+}
+
+/* Section headings with green accent bar */
+.about-body h2{
+  position: relative;
+  margin: 18px 0 10px;
+  padding-left: 12px;
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  line-height: 1.2;
+}
+.about-body h2::before{
+  content: "";
+  position: absolute;
+  left: 0; top: 0.1em; bottom: 0.1em;
+  width: 6px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--brand), var(--brand-700));
+  opacity: .95;
+}
+
+/* Feature list with checkmarks */
+.about-body ul{
+  margin: 8px 0 4px 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.about-body li{
+  position: relative;
+  padding-left: 28px;
+}
+.about-body li::before{
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--brand-tint);
+  color: var(--brand-700);
+  font-weight: 800;
+  line-height: 1;
+  border: 1px solid rgba(31,122,90,0.25);
+}
+
+/* Fine-tuning */
+.about-body strong{ font-weight: 800; }
+.about-body a{ color: var(--brand); }
+.about-body a:hover{ color: var(--brand-700); }
+
+/* Responsive padding */
+@media (min-width: 640px){
+  .about-hero{ padding: 34px 30px; }
+  .about-body{ padding: 26px; }
+}
