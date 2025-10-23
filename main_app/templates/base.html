@@ -42,8 +42,10 @@
           {% else %}
             <li><a href="{% url 'home' %}">FareShare</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
-            <li><a href="{% url 'login' %}">Login</a></li>
-            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li class="nav-right auth-links">
+              <a href="{% url 'login' %}">Login</a>
+              <a href="{% url 'signup' %}">Sign Up</a>
+            </li>
           {% endif %}
         </ul>
       </nav>
