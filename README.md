@@ -1,8 +1,8 @@
 # Introducing, FareShare 💸 ✈️!
 
-![FareShare Logo](static/images/Logo.svg)
+![FareShare Logo](main_app/static/images/Logo.svg)
 
-#### [FareShare Deployed App](https://fareshare-cost-splitter.herokuapp.com/)  
+#### [FareShare Deployed App](https://fareshare-ba0541f3222e.herokuapp.com/shares/)  
 
 ## Description
 
