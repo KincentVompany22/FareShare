@@ -46,9 +46,6 @@
     <ul class="split-list">
       {% for split in fare.split_between.all %}
       <li class="split-item">
-        <span class="avatar" aria-hidden="true">
-          {{ split.username|first|upper }}
-        </span>
         <span class="name">{{ split.username }}</span>
       </li>
       {% endfor %}

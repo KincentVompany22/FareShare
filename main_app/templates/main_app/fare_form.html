@@ -13,7 +13,7 @@
 <div class="page-header">
   {% if fare %}
   <h1> Edit {{fare.name}} Fare</h1>
-  <a href="{% url 'share-detail' pk=object.share_id %}" class="btn">Back to Share</a>
+  <a href="{% url 'fare-detail' view.kwargs.share_id fare.id %}" class="btn">Back to Fare</a>
   {% else %}
   <h1>Add Fare</h1>
   <a href="{% url 'share-detail' pk=view.kwargs.share_id %}" class="btn">Back to Share</a>
