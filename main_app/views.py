@@ -159,6 +159,12 @@ class ShareUpdate(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return (Share.objects.filter(creator=self.request.user)) # restricts the query set to only creator
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.participants.add(self.request.user) # keeps creator as a participant
+        return response
+    
+
 class ShareDelete(LoginRequiredMixin, DeleteView):
     model = Share
     success_url = '/shares/'
