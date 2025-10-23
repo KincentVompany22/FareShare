@@ -49,9 +49,17 @@
     <ul class="balance-list">
       {% for balance in balances %}
       <li class="balance-row">
-        <span class="participant">{{ balance.participant.username }}</span>
+        <span class="participant">{{ balance.participant.username }} 
+          {% if balance.participant.id == share.creator_id and balance.participant.id == user.id %} 
+            <span class="badge me creator" title="You created this share">Me • Creator</span>
+          {% elif balance.participant.id == share.creator_id %}
+            <span class="badge creator" title="Share creator">Creator</span>
+          {% elif balance.participant.id == user.id %}
+            <span class="badge me" title="You">Me</span>
+          {% endif %}
+        </span>
         <span class="amount {% if balance.net < 0 %}neg{% else %}pos{% endif %}">
-          {% if balance.net < 0 %}−{% endif %}
+          {% if balance.net < 0 %}-{% endif %}
           {{ share.get_currency_display|slice:':1' }}{{ balance.net|floatformat:2|cut:"-" }}
         </span>
       </li>

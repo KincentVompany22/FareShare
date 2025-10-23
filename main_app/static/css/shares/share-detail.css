@@ -173,6 +173,41 @@
 .btn.danger{ background: #dc2626; }
 .btn.danger:hover{ background: #b91c1c; }
 
+/* Small rounded badges */
+.badge{
+  display:inline-flex; align-items:center;
+  padding:.22rem .55rem; margin-left:.4rem;
+  font-size:.85rem; font-weight:700;
+  border-radius:999px;
+  border:1px solid rgba(31,122,90,0.20);
+  background: var(--brand-tint);
+  color: var(--brand-700);
+  vertical-align: middle;
+}
+
+/* Emphasize the logged-in user */
+.badge.me{
+  background: linear-gradient(180deg,#fff,rgba(255,255,255,.9));
+  color: var(--navy);
+  border-color: rgba(37,158,116,.35);
+  box-shadow: 0 0 0 3px rgba(37,158,116,.10);
+}
+
+/* Crown vibe for creator */
+.badge.creator{
+  position: relative;
+}
+.badge.creator::before{
+  position:absolute; left:.45rem; top:50%; transform:translateY(-48%);
+  font-size:.95rem;
+}
+
+/* When the same person is both */
+.badge.me.creator{
+  border-color: rgba(37,158,116,.45);
+  box-shadow: 0 0 0 4px rgba(37,158,116,.14);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 640px){
   .share-metrics{ grid-template-columns: 1fr; }
